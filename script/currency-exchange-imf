@@ -1,0 +1,97 @@
+#!/usr/bin/perl -w
+use Modern::Perl '2020';
+use strict;
+use warnings FATAL => 'all';
+use Data::Printer;
+use IO::File;
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
+use Currency::Exchange::IMF;
+use Getopt::Long;
+use Try::Tiny;
+
+my $currency = undef;
+my $source = 'SDR';
+my $from = undef;
+my $to = undef;
+my $help = 0;
+my $csv = 0;
+my @supportedCurrencies = qw(CNY EUR JPY GBP USD DZD AUD ATS BHD BEF VEF VES BWP BRL BND CAD CLP COP CYP CZK DKK DEM EEK FIM FRF GRD HUF ISK INR IDR IRR IEP ILS ITL KZT KRW KWD LYD LUF MYR MTL MUR MXN NPR NLG NZD NOK OMR PKR PEN PHP PLN PTE QAR RUB SAR SGD SKK SIT ZAR ESP LKR SEK CHF THB TTD TND AED UYU VEB);
+
+
+GetOptions(
+    'currency|c=s' => \$currency,
+    'from|f=s'   => \$from,
+    'to|t=s'     => \$to,
+    'help|h'    => \$help
+);
+ sub validate(){
+     try{
+        DateTime::Format::DateParse->parse_datetime($from);
+        DateTime::Format::DateParse->parse_datetime($to);
+     }catch {
+        print "Invalid date format\n";
+        help();
+        exit;
+     }
+ }
+
+sub help(){
+    print <<EOF;
+Usage: currency-exchange-imf -c=USD,EUR -f=2020-01-30
+Usage: currency-exchange-imf -c=USD,EUR -f=2020-01-30 -t=2020-02-05
+
+Options:
+    -c|--currency: comma seperated list of currencies codes Ex: usd,eur
+    -f|--from:     Start date from which the rates will be fetched
+    -t|--to (optional): End date to stop fetching rates.
+
+Supported currencies:
+    CNY EUR JPY GBP USD DZD AUD ATS BHD BEF VEF VES BWP BRL BND CAD CLP COP CYP CZK DKK DEM EEK FIM FRF GRD HUF
+    ISK INR IDR IRR IEP ILS ITL KZT KRW KWD LYD LUF MYR MTL MUR MXN NPR NLG NZD NOK OMR PKR PEN PHP PLN PTE QAR
+    RUB SAR SGD SKK SIT ZAR ESP LKR SEK CHF THB TTD TND AED UYU VEB
+
+Output:
+    DATE,SOURCE_CURRENCY,TARGET_CURRENCY,EXCHANGE_RATE
+    04-Feb-2020,SDR,USD,1.37635
+    04-Feb-2020,SDR,EUR,1.24579
+    05-Feb-2020,SDR,USD,1.37542
+    05-Feb-2020,SDR,EUR,1.24777
+    06-Feb-2020,SDR,USD,1.37356
+    06-Feb-2020,SDR,EUR,1.24835
+    03-Feb-2020,SDR,USD,1.37711
+    03-Feb-2020,SDR,EUR,1.24446
+
+EOF
+}
+if($help) {
+    help();
+    exit;
+}
+
+if (!defined($currency) || !defined($from)){
+    help();
+    exit;
+}else{
+    validate();
+    my @currencies = split(',',uc($currency));
+    $currency =~ s/\s//g;
+    $to = $from if(not defined($to));
+
+    my $imf = Currency::Exchange::IMF->new('targetCurrencies' => ,\@currencies, 'sourceCurrency' => 'SDR', 'fromDate' => $from, 'toDate' => $to);
+
+    my $data = $imf->getRates;
+    #Output as CSV
+    print "DATE,SOURCE_CURRENCY,TARGET_CURRENCY,EXCHANGE_RATE\n";
+    foreach my $date (keys %{$data}){
+        my $line = $date.",SDR";
+        foreach my $currency (keys %{$data->{$date}}){
+            print $line .",".$currency.",".$data->{$date}->{$currency}."\n";
+        }
+    }
+
+}
+
+
+
+
