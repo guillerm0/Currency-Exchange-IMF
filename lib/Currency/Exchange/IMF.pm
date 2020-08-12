@@ -3,7 +3,6 @@ package Currency::Exchange::IMF;
 use 5.006;
 use strict;
 use warnings;
-use Modern::Perl '2020';
 use Moose;
 use DateTime::Format::DateParse;
 use WWW::Mechanize;
