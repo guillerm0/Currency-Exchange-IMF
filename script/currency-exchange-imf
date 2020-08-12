@@ -2,10 +2,7 @@
 use Modern::Perl '2020';
 use strict;
 use warnings FATAL => 'all';
-use Data::Printer;
 use IO::File;
-use FindBin qw($Bin);
-use lib "$Bin/../lib";
 use Currency::Exchange::IMF;
 use Getopt::Long;
 use Try::Tiny;

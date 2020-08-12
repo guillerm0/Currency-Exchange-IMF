@@ -19,7 +19,6 @@ my %WriteMakefileArgs = (
     PREREQ_PM => {
         'Modern::Perl' => '0',
         'Moose' => '0',
-        'Data::Printer' => '0',
         'DateTime::Format::DateParse' => '0',
         'WWW::Mechanize' => '0',
         'File::Util::Tempdir' => '0',

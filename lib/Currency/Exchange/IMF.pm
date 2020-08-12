@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use Modern::Perl '2020';
 use Moose;
-use Data::Printer;
 use DateTime::Format::DateParse;
 use WWW::Mechanize;
 use File::Util::Tempdir qw(get_tempdir get_user_tempdir);
