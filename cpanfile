@@ -1,0 +1,10 @@
+requires 'Modern::Perl';
+requires 'Moose';
+requires 'DateTime::Format::DateParse';
+requires 'WWW::Mechanize';
+requires 'File::Util::Tempdir';
+requires 'File::Util';
+requires 'String::Random';
+requires 'XML::LibXML::Simple';
+requires 'Try::Tiny';
+requires 'Test::More';

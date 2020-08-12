@@ -2,6 +2,7 @@ use 5.006;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
+use inc::Module::Install;
 
 my %WriteMakefileArgs = (
     NAME             => 'Currency::Exchange::IMF',
