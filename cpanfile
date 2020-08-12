@@ -8,3 +8,4 @@ requires 'String::Random';
 requires 'XML::LibXML::Simple';
 requires 'Try::Tiny';
 requires 'Test::More';
+requires 'LWP::Protocol::https';
